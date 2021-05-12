@@ -1,0 +1,8 @@
+{
+  "/deals/primaryContact": "/primaryContact",
+  "/deals/conversation": "/conversation",
+  "/deals/makeDecisions": "/makeDecisions",
+  "/deals/accept": "/accept",
+  "/deals": "/db",
+  "/deals/*/*": "/$1/$2"
+}

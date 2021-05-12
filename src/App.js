@@ -1,23 +1,65 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from "react";
+
+import useRoutes from "./routes";
+import Menu from "./components/Menu";
+import makeStyles from "@material-ui/core/styles/makeStyles";
+import {Box} from "@material-ui/core";
+import PopupNotification from "./components/PopupNotification";
+import AlertDialog from "./components/AlertDialog";
+import {fetchClearDeals, fetchRemoveDeal, setLoaded} from "./redux/actions/deals";
+import {REMOVE_ERROR, REMOVE_SUCCESS} from "./types";
+import {useDispatch} from "react-redux";
+
+const useStyles = makeStyles(theme => ({
+    root: {
+        display: "flex"
+    },
+    box: {
+        flexGrow: 1
+    }
+}))
 
 function App() {
+
+    const handleClosePopup = (event, reason) => {
+        if (reason === "clickway") return
+        setPopup(prevState => ({...prevState, open: false}))
+    }
+
+    const handleCloseDialog = () => {
+        setDialog(prevState => ({...prevState, open: false}))
+    }
+
+    const showPopup = ({type, message}) => {
+        setPopup({open: true, type, message})
+    }
+
+    const showDialog = ({title, message, dialogProps, handleCloseDialogAgree}) => {
+        setDialog({open: true, message, title, dialogProps, handleCloseDialogAgree})
+    }
+
+    const classes = useStyles()
+    const routes = useRoutes({showPopup, showDialog, handleCloseDialog, handleClosePopup})
+    const dispatch = useDispatch()
+    const [dialog, setDialog] = useState({})
+    const [popup, setPopup] = useState({})
+
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={classes.root}>
+        <Menu />
+        <Box className={classes.box}>
+            {routes}
+        </Box>
+        <PopupNotification
+            popup={popup}
+            onClosePopup={handleClosePopup}
+        />
+        <AlertDialog
+            {...dialog}
+            onCloseDialog={handleCloseDialog}
+        />
     </div>
   );
 }

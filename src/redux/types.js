@@ -1,0 +1,8 @@
+export const SET_LOADED = 'SET_LOADED'
+export const SET_DEAL = 'SET_DEAL'
+export const ADD_DEAL = 'ADD_DEAL'
+export const REMOVE_DEAL = 'REMOVE_DEAL'
+export const CLEAR_DEALS = 'CLEAR_DEALS'
+export const SET_CONTACTS = 'SET_CONTACTS'
+export const ADD_CONTACT = 'ADD_CONTACT'
+export const REMOVE_CONTACT = 'REMOVE_CONTACT'
