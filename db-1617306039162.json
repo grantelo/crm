@@ -1,0 +1,52 @@
+{
+  "deals": {
+    "primaryContact": [
+      {
+        "title": "Apple!!!!",
+        "sum": 10000,
+        "name": "Grant",
+        "email": "grant.galaxys10@gmail.com",
+        "titleCompany": "Apple",
+        "addressCompany": "California"
+      },
+      {
+        "title": "Amazon!!!!",
+        "sum": 200000,
+        "name": "Bill",
+        "email": "Bill.galaxys10@gmail.com",
+        "titleCompany": "Amazon",
+        "addressCompany": "California"
+      }
+    ],
+    "conversation": [
+      {
+        "title": "Google!!!!",
+        "sum": 1000000,
+        "name": "Grant",
+        "email": "grant.galaxys10@gmail.com",
+        "titleCompany": "Google",
+        "addressCompany": "New Yurk"
+      }
+    ],
+    "makeDecisions": [
+      {
+        "title": "Google!!!!",
+        "sum": 1000000,
+        "name": "Grant",
+        "email": "grant.galaxys10@gmail.com",
+        "titleCompany": "Google",
+        "addressCompany": "New Yurk"
+      }
+    ],
+    "accept": [
+      {
+        "title": "Пить Кофе!!!!",
+        "sum": 222000000,
+        "name": "Kas",
+        "email": "Kas.galaxys10@gmail.com",
+        "titleCompany": "Пить Кофе!!!!",
+        "addressCompany": "New Yurk"
+      }
+    ]
+  }
+}
