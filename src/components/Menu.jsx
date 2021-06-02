@@ -9,14 +9,17 @@ import {darken, lighten, ListItemIcon} from "@material-ui/core";
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import ContactsIcon from '@material-ui/icons/Contacts';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import AccountBalanceWalletIcon from '@material-ui/icons/AccountBalanceWallet';
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import Box from "@material-ui/core/Box";
+import Finance from "../page/Finance";
 
 
 const initMap = [
     ["Dashboard", <DashboardIcon/>],
     ["Contacts", <ContactsIcon/>],
-    ["Deal", <MonetizationOnIcon/>]
+    ["Deal", <MonetizationOnIcon/>],
+    ["Finance", <AccountBalanceWalletIcon />]
 ]
 
 const useStyles = makeStyles(theme => ({

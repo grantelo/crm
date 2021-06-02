@@ -52,7 +52,6 @@ const useStyle = makeStyles(() => ({
         border: "1px solid #c4c4c4",
         "& input": {
             paddingLeft: "10px",
-
         }
     },
     contactBox: {

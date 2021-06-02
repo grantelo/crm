@@ -34,13 +34,13 @@ function App() {
         setPopup({open: true, type, message})
     }
 
-    const showDialog = ({title, message, dialogProps, handleCloseDialogAgree}) => {
-        setDialog({open: true, message, title, dialogProps, handleCloseDialogAgree})
+    const showDialog = ({title, message, dialogProps, handleCloseDialogAgree, renderComponent}) => {
+        console.log(renderComponent)
+        setDialog({open: true, message, title, dialogProps, handleCloseDialogAgree, renderComponent})
     }
 
     const classes = useStyles()
     const routes = useRoutes({showPopup, showDialog, handleCloseDialog, handleClosePopup})
-    const dispatch = useDispatch()
     const [dialog, setDialog] = useState({})
     const [popup, setPopup] = useState({})
 

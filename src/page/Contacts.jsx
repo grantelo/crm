@@ -1,9 +1,9 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 
 import {GridOverlay} from "@material-ui/data-grid";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import {DataGrid} from '@material-ui/data-grid';
-import {Box, darken} from "@material-ui/core";
+import {DataGrid} from "@material-ui/data-grid";
+import {Box, darken, Tooltip} from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -14,12 +14,22 @@ import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from "@material-ui/icons/Search";
 import DeleteIcon from '@material-ui/icons/Delete';
 import {useDispatch, useSelector} from "react-redux";
-import {fetchContact, fetchRemoveContact} from "../redux/actions/contacts";
+import {fetchClearContacts, fetchContact, fetchEditContact, fetchRemoveContact} from "../redux/actions/contacts";
 import EditIcon from '@material-ui/icons/Edit';
 import IconButton from "@material-ui/core/IconButton";
-import {REMOVE_CONTACT} from "../redux/types";
-import {REMOVE_DEAL_ERROR, REMOVE_DEAL_SUCCESS, REMOVE_ERROR, REMOVE_SUCCESS} from "../types";
-import {setLoaded} from "../redux/actions/deals";
+import {CLEAR_CONTACTS, REMOVE_CONTACT} from "../redux/types";
+import {
+    DIALOG_CLEAR_CONTACTS,
+    DIALOG_CLEAR_DEALS, EDIT_ERROR,
+    EDIT_SUCCESS,
+    REMOVE_DEAL_ERROR,
+    REMOVE_DEAL_SUCCESS,
+    REMOVE_ERROR,
+    REMOVE_SUCCESS
+} from "../types";
+import {fetchClearDeals, setLoaded} from "../redux/actions/deals";
+import AddContactForm from '../components/AddContactForm/index'
+import EditContactForm from "../components/EditContactForm";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -109,12 +119,8 @@ const useStyles = makeStyles((theme) => ({
     button: {
         display: "flex",
         marginLeft: "30px",
-        backgroundColor: "#4c8bf7",
         whiteSpace: "nowrap",
         color: "#fff",
-        "&:hover": {
-            backgroundColor: darken("#4c8bf7", 0.1)
-        }
     },
     box: {},
     boxDeleteButton: {
@@ -163,7 +169,10 @@ function CustomNoRowsOverlay() {
                 aria-hidden
                 focusable="false"
             >
-                <g fill="none" fillRule="evenodd">
+                <g
+                    fill="none"
+                    fillRule="evenodd"
+                >
                     <g transform="translate(24 31.67)">
                         <ellipse
                             className="ant-empty-img-5"
@@ -189,8 +198,16 @@ function CustomNoRowsOverlay() {
                         className="ant-empty-img-3"
                         d="M149.121 33.292l-6.83 2.65a1 1 0 0 1-1.317-1.23l1.937-6.207c-2.589-2.944-4.109-6.534-4.109-10.408C138.802 8.102 148.92 0 161.402 0 173.881 0 184 8.102 184 18.097c0 9.995-10.118 18.097-22.599 18.097-4.528 0-8.744-1.066-12.28-2.902z"
                     />
-                    <g className="ant-empty-img-4" transform="translate(149.65 15.383)">
-                        <ellipse cx="20.654" cy="3.167" rx="2.849" ry="2.815"/>
+                    <g
+                        className="ant-empty-img-4"
+                        transform="translate(149.65 15.383)"
+                    >
+                        <ellipse
+                            cx="20.654"
+                            cy="3.167"
+                            rx="2.849"
+                            ry="2.815"
+                        />
                         <path d="M5.698 5.63H0L2.898.704zM9.259.704h4.985V5.63H9.259z"/>
                     </g>
                 </g>
@@ -201,43 +218,70 @@ function CustomNoRowsOverlay() {
 }
 
 
-const Contacts = ({showPopup}) => {
+const Contacts = ({showPopup, showDialog, handleCloseDialog}) => {
     const columns = [
-        {field: 'title', headerName: 'Наименование', flex: 1},
-        {field: 'name', headerName: 'Имя', flex: 1},
+        {field: 'id', headerName: "Id", flex: 1, editable: true},
+        {field: 'title', headerName: 'Наименование', flex: 1, editable: true},
+        {field: 'name', headerName: 'Имя', flex: 1, editable: true},
         {
             field: 'phone',
             headerName: 'Телефон',
             flex: 1,
+            editable: true
         },
         {
             field: 'email',
             headerName: 'Email',
             flex: 1,
+            editable: true
         },
-        {field: 'companyTitle', headerName: 'Компания', flex: 1},
+        {field: 'companyTitle', headerName: 'Компания', flex: 1, editable: true},
         {
             flex: 1,
             field: 'companyAddress',
             headerName: 'Адрес компании',
+            editable: true
         },
         {
-            width: 150,
+            width: 120,
             field: 'actions',
+            align: 'center',
             headerName: "Действие",
+            editable: true,
             renderCell: params => (
                 <Box>
-                    <IconButton style={{padding: 0, marginRight: "20px"}} color={"primary"}>
-                        <EditIcon/>
-                    </IconButton>
-                    <IconButton onClick={() => handleRemoveContact(params.row.id)} style={{padding: 0}}
-                                color={"secondary"}>
-                        <DeleteIcon/>
-                    </IconButton>
+                    {/*<IconButton
+                        onClick={() => showDialog({
+                            renderComponent: <AddContactForm
+                                showPopup={showPopup}
+                                closeDialog={handleCloseDialog}
+                            />
+                        })}
+                        style={{padding: 0, marginRight: "20px"}}
+                        color={"primary"}
+                    >
+                        <EditIcon
+                            onClick={() => console.log()
+                            }
+                        />
+                    </IconButton>*/}
+                    <Tooltip title={"Delete"}>
+                        <IconButton
+                            onClick={() => handleRemoveContact(params.row.id)}
+                            style={{padding: 0}}
+                            color={"secondary"}
+                        >
+                            <DeleteIcon fontSize={"large"}/>
+                        </IconButton>
+                    </Tooltip>
                 </Box>
             )
         }
     ];
+
+    useEffect(() => {
+        dispatch(fetchContact())
+    }, []);
 
     const handleRemoveContact = (id) => {
         dispatch(fetchRemoveContact(id))
@@ -255,22 +299,81 @@ const Contacts = ({showPopup}) => {
             })
     }
 
+    const handleEditContact = (params) => {
+        console.log(params)
+        dispatch(fetchEditContact({id: params.id, obj: {key: params.field, value: params.props.value}}))
+            .then(({status}) => {
+                if (status === 200) {
+                    showPopup(EDIT_SUCCESS)
+                    return
+                }
+
+                showPopup(EDIT_ERROR)
+            })
+            .catch(() => {
+                setLoaded(true)
+                showPopup(EDIT_ERROR)
+            })
+    }
+
+    const handleClearContacts = () => {
+        handleCloseDialog()
+        dispatch(fetchClearContacts())
+            .then(({status}) => {
+                if (status === 200) {
+                    showPopup(REMOVE_SUCCESS)
+                    return
+                }
+
+                showPopup(REMOVE_ERROR)
+            })
+            .catch((err) => {
+                console.log(err)
+                setLoaded(true)
+                showPopup(REMOVE_ERROR)
+            })
+    }
+
+    const handleClickClearContacts = () => {
+        showDialog({
+            ...DIALOG_CLEAR_CONTACTS(),
+            handleCloseDialogAgree: handleClearContacts
+        })
+    }
+
+    const handleChangeValue = (e) => {
+        setValue(prevState => e.target.value)
+    }
+
+    const checkInclude = (str1, str2) => str1.startsWith(str2) || str1.endsWith(str2)
+
+    const filterContacts = (val) => contacts.filter(item =>
+        !!(checkInclude(item.title, val)
+            || checkInclude(item.name, val)
+            || checkInclude(item.phone, val)
+            || checkInclude(item.email, val)
+            || checkInclude(item.companyTitle, val)
+            || checkInclude(item.companyAddress, val)))
+
+
     const classes = useStyles()
+    const [value, setValue] = useState("")
     const dispatch = useDispatch()
     const contacts = useSelector(({contacts}) => contacts.items)
     const isLoaded = useSelector(({contacts}) => contacts.isLoaded)
 
-    useEffect(() => {
-        dispatch(fetchContact())
-    }, []);
-
-
     return (
         <Box className={classes.root}>
-            <AppBar className={classes.appBar} position={"sticky"}>
+            <AppBar
+                className={classes.appBar}
+                position={"sticky"}
+            >
                 <Container>
                     <Toolbar>
-                        <Typography className={classes.title} variant={"h6"}>Контакты</Typography>
+                        <Typography
+                            className={classes.title}
+                            variant={"h6"}
+                        >Контакты</Typography>
                         <div className={classes.search}>
                             <div className={classes.searchIcon}>
                                 <SearchIcon/>
@@ -282,15 +385,32 @@ const Contacts = ({showPopup}) => {
                                 classes={{
                                     input: classes.inputInput
                                 }}
+                                onChange={handleChangeValue}
+                                value={value}
                             />
                         </div>
                         <Button
-                            classes={classes.button}
+                            onClick={() => showDialog({
+                                renderComponent: <AddContactForm
+                                    showPopup={showPopup}
+                                    closeDialog={handleCloseDialog}
+                                />
+                            })}
                             className={classes.button}
                             variant="contained"
                             startIcon={<AddIcon fontSize={"large"}/>}
+                            color={"primary"}
                         >
                             Добавить контакт
+                        </Button>
+                        <Button
+                            onClick={handleClickClearContacts}
+                            className={classes.button}
+                            variant="contained"
+                            startIcon={<DeleteIcon fontSize={"large"}/>}
+                            color={"secondary"}
+                        >
+                            Удалить все
                         </Button>
                     </Toolbar>
                 </Container>
@@ -299,18 +419,18 @@ const Contacts = ({showPopup}) => {
                 <Container>
                     <DataGrid
                         className={classes.dataGrid}
-                        rows={contacts}
+                        rows={filterContacts(value)}
                         autoHeight
                         columns={columns}
                         components={{
                             NoRowsOverlay: CustomNoRowsOverlay
                         }}
-                        checkboxSelection
                         disableColumnMenu
                         disableSelectionOnClick
                         hideFooter
                         disableColumnSelector
                         loading={!isLoaded}
+                        onEditCellChangeCommitted={handleEditContact}
                     />
                 </Container>
             </Box>

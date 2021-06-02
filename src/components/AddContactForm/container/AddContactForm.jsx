@@ -1,9 +1,12 @@
 import React from 'react';
 import {withFormik} from "formik";
 import * as yup from "yup";
-import {useDispatch} from "react-redux";
+import {connect} from "react-redux";
+import AddContactForm from "../component/AddContactForm";
+import {fetchAddContact, setLoaded} from "../../../redux/actions/contacts";
+import {ADD_ERROR, ADD_SUCCESS} from "../../../types";
 
-const validationShema = yup.object({
+const validationSchema = yup.object({
     title: yup
         .string()
         .required('Требуется название'),
@@ -32,9 +35,10 @@ const validationShema = yup.object({
 
 })
 
-const AddContactForm = withFormik({
-    mapPropsToValues: () => (
-        {
+
+
+export default connect()(withFormik({
+    mapPropsToValues: () => ({
             title: '',
             name: '',
             phone: '',
@@ -44,11 +48,25 @@ const AddContactForm = withFormik({
         }
     ),
 
-    validationSchema: validationShema,
+    validationSchema: validationSchema,
 
-    handleSubmit: (values, {setSubmitting}) => {
+    handleSubmit: (values, {props, setSubmitting}) => {
+            props.dispatch(fetchAddContact(values))
+            .then(({status}) => {
+                props.closeDialog()
+                if (status === 201) {
+                    props.showPopup(ADD_SUCCESS)
+                    setSubmitting(false)
+                    return
+                }
 
+                props.showPopup(ADD_ERROR)
+            })
+            .catch(err => {
+                console.log(err)
+                props.closeDialog()
+                props.dispatch(setLoaded(true))
+                props.showPopup(ADD_ERROR)
+            })
     }
-})
-
-export default AddContactForm;
+})(AddContactForm))

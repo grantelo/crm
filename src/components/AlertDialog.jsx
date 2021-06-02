@@ -3,6 +3,7 @@ import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} fr
 import Button from "@material-ui/core/Button";
 
 const AlertDialog = ({open, message, title, onCloseDialog, handleCloseDialogAgree, dialogProps, renderComponent}) => {
+    console.log(renderComponent)
     return (
         <Dialog
             open={open}
@@ -10,21 +11,28 @@ const AlertDialog = ({open, message, title, onCloseDialog, handleCloseDialogAgre
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >
-            <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
-            <DialogContent>
-                <DialogContentText id="alert-dialog-description">
-                    {message}
-                </DialogContentText>
-                {renderComponent}
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={onCloseDialog} color="primary" autoFocus>
-                    Отмена
-                </Button>
-                <Button onClick={() => handleCloseDialogAgree(dialogProps)} color="primary">
-                    Подтвержаю
-                </Button>
-            </DialogActions>
+            {
+                !renderComponent ?
+                (
+                    <>
+                        <DialogTitle id="alert-dialog-title">{title}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                {message}
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={onCloseDialog} color="primary" autoFocus>
+                                Отмена
+                            </Button>
+                            <Button onClick={() => handleCloseDialogAgree(dialogProps)} color="primary">
+                                Подтвержаю
+                            </Button>
+                        </DialogActions>
+                    </>)
+                    :
+                    <DialogContent>{renderComponent}</DialogContent>
+            }
         </Dialog>
     )
 }

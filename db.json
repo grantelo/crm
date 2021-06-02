@@ -1,19 +1,26 @@
 {
-  "primaryContact": [
-    {
-      "title": "T",
-      "sum": 32132,
-      "name": "Grant",
-      "phone": "31231233211",
-      "email": "w@mail.ru",
-      "companyTitle": "ewqe",
-      "companyAddress": "eqwewqeqew",
-      "date": "2021-04-27T13:41:33.272Z",
-      "id": 1
-    }
-  ],
+  "primaryContact": [],
   "conversation": [],
   "makeDecisions": [],
   "accept": [],
-  "contacts": []
+  "contacts": [
+    {
+      "title": "dsad",
+      "name": "sads",
+      "phone": "32132131321",
+      "email": "amazon@gmail.com",
+      "companyTitle": "dasd",
+      "companyAddress": "sadsdassasad",
+      "id": 1
+    }
+  ],
+  "events": [
+    {
+      "id": 1,
+      "sum": 2000,
+      "date": "12.12.32",
+      "category": "chock",
+      "type": "расход"
+    }
+  ]
 }
