@@ -14,7 +14,13 @@ import AddIcon from '@material-ui/icons/Add';
 import SearchIcon from "@material-ui/icons/Search";
 import DeleteIcon from '@material-ui/icons/Delete';
 import {useDispatch, useSelector} from "react-redux";
-import {fetchClearContacts, fetchContact, fetchEditContact, fetchRemoveContact} from "../redux/actions/contacts";
+import {
+    fetchClearContacts,
+    fetchContact,
+    fetchEditContact,
+    fetchRemoveContact,
+    setLoadedContacts
+} from "../redux/actions/contacts";
 import EditIcon from '@material-ui/icons/Edit';
 import IconButton from "@material-ui/core/IconButton";
 import {CLEAR_CONTACTS, REMOVE_CONTACT} from "../redux/types";
@@ -27,7 +33,7 @@ import {
     REMOVE_ERROR,
     REMOVE_SUCCESS
 } from "../types";
-import {fetchClearDeals, setLoaded} from "../redux/actions/deals";
+import {fetchClearDeals} from "../redux/actions/deals";
 import AddContactForm from '../components/AddContactForm/index'
 import EditContactForm from "../components/EditContactForm";
 
@@ -294,13 +300,12 @@ const Contacts = ({showPopup, showDialog, handleCloseDialog}) => {
                 showPopup(REMOVE_ERROR)
             })
             .catch(() => {
-                setLoaded(true)
+                setLoadedContacts(true)
                 showPopup(REMOVE_ERROR)
             })
     }
 
     const handleEditContact = (params) => {
-        console.log(params)
         dispatch(fetchEditContact({id: params.id, obj: {key: params.field, value: params.props.value}}))
             .then(({status}) => {
                 if (status === 200) {
@@ -311,7 +316,7 @@ const Contacts = ({showPopup, showDialog, handleCloseDialog}) => {
                 showPopup(EDIT_ERROR)
             })
             .catch(() => {
-                setLoaded(true)
+                setLoadedContacts(true)
                 showPopup(EDIT_ERROR)
             })
     }
@@ -329,7 +334,7 @@ const Contacts = ({showPopup, showDialog, handleCloseDialog}) => {
             })
             .catch((err) => {
                 console.log(err)
-                setLoaded(true)
+                setLoadedContacts(true)
                 showPopup(REMOVE_ERROR)
             })
     }

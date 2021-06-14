@@ -1,4 +1,11 @@
-import {ADD_CONTACT, CLEAR_CONTACTS, EDIT_CONTACT, REMOVE_CONTACT, SET_CONTACTS} from "../types";
+import {
+    ADD_CONTACT,
+    CLEAR_CONTACTS,
+    EDIT_CONTACT,
+    REMOVE_CONTACT,
+    SET_CONTACTS,
+    SET_LOADED_CONTACTS
+} from "../types";
 
 const initialState = {
     items: [],
@@ -7,6 +14,13 @@ const initialState = {
 
 const contacts = (state = initialState, action) => {
     switch (action.type) {
+        case SET_LOADED_CONTACTS: {
+            return {
+                isLoaded: action.payload,
+                items: state.items
+            }
+        }
+
         case SET_CONTACTS: {
             console.log(action.payload)
             return {

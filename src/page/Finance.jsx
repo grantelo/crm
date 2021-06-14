@@ -4,13 +4,20 @@ import Typography from "@material-ui/core/Typography";
 import {Fab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
-import {fetchEvents} from "../redux/actions/finances";
+import {fetchDeleteEvent, fetchEvents, setLoadedEvents} from "../redux/actions/finances";
 import {useDispatch, useSelector} from "react-redux";
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
 import Button from "@material-ui/core/Button";
 import AddIcon from "@material-ui/icons/Add";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import AddEventForm from "../components/AddEventForm/index"
+import DeleteIcon from "@material-ui/icons/Delete";
+import IconButton from "@material-ui/core/IconButton";
+import {Link} from "react-router-dom";
+import {format} from "date-fns";
+import {ru} from "date-fns/esm/locale";
+import Paper from "@material-ui/core/Paper";
+import {REMOVE_ERROR, REMOVE_SUCCESS} from "../types";
 
 const useStyle = makeStyles(theme => ({
     container: {
@@ -23,10 +30,21 @@ const useStyle = makeStyles(theme => ({
         position: 'absolute',
         bottom: theme.spacing(-10),
         right: theme.spacing(1),
+    },
+    tableContainer: {
+        marginTop: "30px",
+        maxHeight: "70vh"
+    },
+    deleteButton: {
+        marginLeft: "10px"
     }
 }))
 
-const Finance = ({showDialog}) => {
+const getCurrency = (value, currency) => {
+    return new Intl.NumberFormat("ru-RU", {style: "currency", currency}).format(value)
+}
+
+const Finance = ({showPopup, showDialog, handleCloseDialog}) => {
     const classes = useStyle()
     const dispatch = useDispatch()
     const finances = useSelector(({finances}) => finances.items)
@@ -36,7 +54,29 @@ const Finance = ({showDialog}) => {
     }, [])
 
     const handleAddEvent = () => {
-        showDialog({renderComponent: <AddEventForm />})
+        showDialog({
+            renderComponent: <AddEventForm
+                showPopup={showPopup}
+                closeDialog={handleCloseDialog}
+            />
+        })
+    }
+
+    const handleDeleteEvent = (id) => {
+        dispatch(fetchDeleteEvent(id))
+            .then(({status}) => {
+                if (status === 200) {
+                    showPopup(REMOVE_SUCCESS)
+                    return
+                }
+
+                showPopup(REMOVE_ERROR)
+            })
+            .catch((err) => {
+                console.log(err)
+                setLoadedEvents(true)
+                showPopup(REMOVE_ERROR)
+            })
     }
 
     return (
@@ -49,7 +89,7 @@ const Finance = ({showDialog}) => {
                     События
                 </Typography>
                 <Divider/>
-                <TableContainer>
+                <TableContainer className={classes.tableContainer} component={Paper}>
                     <Table>
                         <TableHead>
                             <TableRow>
@@ -62,17 +102,29 @@ const Finance = ({showDialog}) => {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {finances.map(row => (
+                            {finances?.map(row => (
                                 <TableRow key={row.id}>
-                                    {Object.values(row).map(item => (
-                                        <TableCell key={item}>{item}</TableCell>
-                                    ))}
+                                    <TableCell>{row.id}</TableCell>
+                                    <TableCell>{getCurrency(row.sum, row.currency)}</TableCell>
+                                    <TableCell>{format(new Date(row.date), "dd.MM.yyyy HH:mm")}</TableCell>
+                                    <TableCell>{row.category}</TableCell>
+                                    <TableCell>{row.type === "income" ? "доход" : "расход"}</TableCell>
                                     <TableCell>
+                                        <Link to={`/details/${row.id}`}>
+                                            <Button
+                                                color={"primary"}
+                                                variant={"contained"}
+                                            >
+                                                <OpenInNewIcon/>
+                                            </Button>
+                                        </Link>
                                         <Button
-                                            color={"primary"}
+                                            onClick={() => handleDeleteEvent(row.id)}
+                                            className={classes.deleteButton}
+                                            color={"secondary"}
                                             variant={"contained"}
                                         >
-                                            <OpenInNewIcon/>
+                                            <DeleteIcon />
                                         </Button>
                                     </TableCell>
                                 </TableRow>

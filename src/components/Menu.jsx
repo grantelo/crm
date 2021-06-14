@@ -72,7 +72,7 @@ const Menu = () => {
         <Drawer className={classes.Drawer} variant="permanent">
             <List className={classes.Drawer}>
                 {Array.from(items).map(([key, val]) => (
-                    <ListItem className={classes.listItem}>
+                    <ListItem key={key} className={classes.listItem}>
                         <Link className={classes.link} to={`/${key}`}>
                             <ListItemText>{key}</ListItemText>
                             <ListItemIcon className={classes.listItemIcon}>{val}</ListItemIcon>

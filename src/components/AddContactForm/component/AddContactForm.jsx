@@ -138,6 +138,7 @@ const AddContactForm = props => {
                     type={"submit"}
                     variant={"contained"}
                     color={"primary"}
+                    disabled={isSubmitting}
                 >
                     Добавить контакт
                 </Button>

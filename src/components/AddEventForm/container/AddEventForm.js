@@ -4,7 +4,7 @@ import {fetchAddContact, setLoaded} from "../../../redux/actions/contacts";
 import {ADD_ERROR, ADD_SUCCESS} from "../../../types";
 import AddContactForm from "../../AddContactForm/component/AddContactForm";
 import * as yup from "yup";
-import {fetchAddEvent} from "../../../redux/actions/finances";
+import {fetchAddEvent, setLoadedEvents} from "../../../redux/actions/finances";
 import AddEventForm from "../component/AddEventForm";
 
 const validationSchema = yup.object({
@@ -28,9 +28,9 @@ const validationSchema = yup.object({
 export default connect()(withFormik({
     mapPropsToValues: () => ({
             category: '',
-            type: '',
-            sum: '',
-            currency: '₽',
+            type: 'income',
+            sum: 0,
+            currency: 'RUB',
             description: '',
         }
     ),
@@ -38,6 +38,23 @@ export default connect()(withFormik({
     validationSchema: validationSchema,
 
     handleSubmit: (values, {props, setSubmitting}) => {
-        console.log(values)
+        console.log(props)
+        props.dispatch(fetchAddEvent({...values, date: new Date()}))
+            .then(({status}) => {
+                props.closeDialog()
+                if (status === 201) {
+                    props.showPopup(ADD_SUCCESS)
+                    setSubmitting(false)
+                    return
+                }
+
+                props.showPopup(ADD_ERROR)
+            })
+            .catch(err => {
+                console.log(err)
+                props.closeDialog()
+                props.dispatch(setLoadedEvents(true))
+                props.showPopup(ADD_ERROR)
+            })
     }
 })(AddEventForm))

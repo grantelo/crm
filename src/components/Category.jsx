@@ -10,25 +10,18 @@ const useStyle = makeStyles((theme) => ({
         justifyContent: "center",
     },
     list: {
-        overflow: "hidden",
         display: "flex",
-        border: "1px solid #fff",
-        borderRadius: "50px",
+        border: "2px solid gray",
+        borderRadius: "3px"
     },
     listItem: {
-        padding: "2px 20px",
-        "&.active": {
-            fontWeight: "600",
-            backgroundColor: fade("#fff", 0.15)
-        }
-    },
-    listItemIcon: {
-        minWidth: "auto",
-        marginRight: "10px"
-    },
-    listItemText: {
-        "& span": {
-            fontWeight: "inherit"
+        width: "200px",
+        padding: "5px",
+        "&:hover": {
+            backgroundColor: "red"
+        },
+        "&+$listItem": {
+            borderLeft: "1px solid gray"
         }
     }
 }))
@@ -40,7 +33,7 @@ const Category = ({className, items}) => {
         <Box className={classNames(classes.root, className)}>
             <List className={classes.list} disablePadding={true}>
                 {items.map((item) => (
-                    <ListItem button className={classes.listItem}>
+                    <ListItem key={item.title} button className={classes.listItem}>
                         {item?.icon &&
                         <ListItemIcon className={classes.listItemIcon}>
                             {item.icon}

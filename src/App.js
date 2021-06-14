@@ -45,23 +45,22 @@ function App() {
     const [popup, setPopup] = useState({})
 
 
-
-  return (
-    <div className={classes.root}>
-        <Menu />
-        <Box className={classes.box}>
-            {routes}
-        </Box>
-        <PopupNotification
-            popup={popup}
-            onClosePopup={handleClosePopup}
-        />
-        <AlertDialog
-            {...dialog}
-            onCloseDialog={handleCloseDialog}
-        />
-    </div>
-  );
+    return (
+        <div className={classes.root}>
+            <Menu/>
+            <Box className={classes.box}>
+                {routes}
+            </Box>
+            <PopupNotification
+                popup={popup}
+                onClosePopup={handleClosePopup}
+            />
+            <AlertDialog
+                {...dialog}
+                onCloseDialog={handleCloseDialog}
+            />
+        </div>
+    );
 }
 
 export default App;

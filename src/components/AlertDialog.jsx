@@ -2,8 +2,7 @@ import React, {useState} from 'react';
 import {Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 
-const AlertDialog = ({open, message, title, onCloseDialog, handleCloseDialogAgree, dialogProps, renderComponent}) => {
-    console.log(renderComponent)
+const AlertDialog = ({open = false, message, title, onCloseDialog, handleCloseDialogAgree, dialogProps, renderComponent}) => {
     return (
         <Dialog
             open={open}

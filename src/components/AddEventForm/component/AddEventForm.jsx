@@ -17,6 +17,30 @@ import AddIcon from '@material-ui/icons/Add';
 import NumberFormat from "react-number-format";
 import FormHelperText from "@material-ui/core/FormHelperText";
 
+const costs = [
+    <MenuItem value={"Транспорт"}>Транспорт</MenuItem>,
+    <MenuItem value={"Налоги и штрафы"}>Налоги и штрафы</MenuItem>,
+    <MenuItem value={"Красота, здоровье и обучение"}>Лекарства</MenuItem>,
+    <MenuItem value={"Отпуск"}>Отпуск</MenuItem>,
+    <MenuItem value={"Дом и связь"}>Дом и связь</MenuItem>,
+    <MenuItem value={"Хоз. нужды"}>Хоз. нужды</MenuItem>,
+    <MenuItem value={"Досуг и подарки"}>Досуг</MenuItem>,
+    <MenuItem value={"Одежда и обувь"}>Одежда</MenuItem>,
+    <MenuItem value={"Выплаты по кредитам"}>Выплаты по кредитам</MenuItem>,
+    <MenuItem value={"Досуг"}>Досуг</MenuItem>,
+    <MenuItem value={"Техника"}>Техника</MenuItem>,
+    <MenuItem value={"Бизнес"}>Бизнес</MenuItem>,
+    <MenuItem value={"Аренда"}>Аренда</MenuItem>,
+]
+
+const incomes = [
+    <MenuItem value={"Бизнес"}>Бизнес</MenuItem>,
+    <MenuItem value={"Зарплата"}>Зарплата</MenuItem>,
+    <MenuItem value={"Рента"}>Рента</MenuItem>,
+    <MenuItem value={"Проценты"}>Проценты</MenuItem>,
+    <MenuItem value={"Дивиденты"}>Дивиденты</MenuItem>,
+]
+
 const useStyle = makeStyles(theme => ({
     form: {
         display: "flex",
@@ -27,7 +51,7 @@ const useStyle = makeStyles(theme => ({
         display: "flex",
     },
     select: {
-        marginBottom: theme.spacing(3)
+        marginBottom: theme.spacing(2)
     },
     formControl: {
         minWidth: "120px"
@@ -67,6 +91,7 @@ const AddEventForm = props => {
         isSubmitting,
     } = props
 
+    console.log(values)
 
     const classes = useStyle()
 
@@ -77,33 +102,23 @@ const AddEventForm = props => {
                     <InputLabel
                         id="category"
                         error={touched.category && !!errors.category}
-                    >Категория</InputLabel>
+                    >
+                        Категория
+                    </InputLabel>
                     <Select
+                        className={classes.select}
                         name={"category"}
                         labelId="category"
                         value={values.category}
                         onChange={handleChange}
                         onBlur={handleBlur}
                     >
-                        <MenuItem value={"Транспорт"}>Транспорт</MenuItem>
-                        <MenuItem value={"Налоги и штрафы"}>Налоги и штрафы</MenuItem>
-                        <MenuItem value={"Красота, здоровье и обучение"}>Лекарства</MenuItem>
-                        <MenuItem value={"Отпуск"}>Отпуск</MenuItem>
-                        <MenuItem value={"Дом и связь"}>Дом и связь</MenuItem>
-                        <MenuItem value={"Хоз. нужды"}>Хоз. нужды</MenuItem>
-                        <MenuItem value={"Досуг и подарки"}>Досуг</MenuItem>
-                        <MenuItem value={"Одежда и обувь"}>Одежда</MenuItem>
-                        <MenuItem value={"Выплаты по кредитам"}>Выплаты по кредитам</MenuItem>
-                        <MenuItem value={"Досуг"}>Досуг</MenuItem>
-                        <MenuItem value={"Техника"}>Техника</MenuItem>
-                        <MenuItem value={"Бизнес"}>Бизнес</MenuItem>
-                        <MenuItem value={"Аренда"}>Аренда</MenuItem>
-
-                        <MenuItem value={"Бизнес"}>Бизнес</MenuItem>
-                        <MenuItem value={"Зарплата"}>Зарплата</MenuItem>
-                        <MenuItem value={"Рента"}>Рента</MenuItem>
-                        <MenuItem value={"Проценты"}>Проценты</MenuItem>
-                        <MenuItem value={"Дивиденты"}>Дивиденты</MenuItem>
+                        {
+                            values.type === "income" ?
+                                incomes.map(item => item)
+                                :
+                                costs.map(item => item)
+                        }
                     </Select>
                     <FormHelperText>{touched.category && errors.category}</FormHelperText>
                 </FormControl>
@@ -119,12 +134,12 @@ const AddEventForm = props => {
                         onBlur={handleBlur}
                     >
                         <FormControlLabel
-                            value="доход"
+                            value="income"
                             control={<Radio/>}
                             label="Доход"
                         />
                         <FormControlLabel
-                            value="расход"
+                            value="consumption"
                             control={<Radio/>}
                             label="Расход"
                         />
@@ -157,9 +172,9 @@ const AddEventForm = props => {
                             onBlur={handleBlur}
                             value={values.currency}
                         >
-                            <MenuItem value={"€"}>Евро</MenuItem>
-                            <MenuItem value={"$"}>Доллар</MenuItem>
-                            <MenuItem value={"₽"}>Рубль</MenuItem>
+                            <MenuItem value={"EUR"}>Евро</MenuItem>
+                            <MenuItem value={"USD"}>Доллар</MenuItem>
+                            <MenuItem value={"RUB"}>Рубль</MenuItem>
                         </Select>
                         <FormHelperText>{touched.currency && errors.currency}</FormHelperText>
                     </FormControl>
@@ -182,6 +197,7 @@ const AddEventForm = props => {
                     type={"submit"}
                     color={"primary"}
                     variant="contained"
+                    disabled={isSubmitting}
                 >
                     Создать
                 </Button>

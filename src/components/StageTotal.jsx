@@ -10,11 +10,11 @@ import Box from "@material-ui/core/Box";
 
 const useStyles = makeStyles((theme) => ({
     root: {
+        padding: "30px 20px",
+        color: "#fff",
         display: "flex",
         flexDirection: "column",
         textAlign: "center",
-        color: "#fff",
-        marginRight: "10px"
     },
     paper: {
         padding: "10px 0",
@@ -22,48 +22,55 @@ const useStyles = makeStyles((theme) => ({
         background: "rgba(22,43,58,.5)",
         border: "1px solid #BFD0D9",
         color: "inherit",
-        borderRadius: "10px"
+        borderRadius: "10px",
+        backgroundColor: "rebeccapurple"
     },
-    paperBottom: {
-        padding: "5px 0",
-        marginTop: "15px"
+    title: {
+        color: "#000"
     },
     line: {
         height: "3px",
         margin: "5px 0 10px"
+    },
+    lineBlue: {
+        backgroundColor: "#0800FF"
+    },
+    lineYellow: {
+        backgroundColor: "#FFFF00"
+    },
+    lineOrange: {
+        backgroundColor: "#FDA500"
+    },
+    lineRed: {
+        backgroundColor: "#FC0000"
     },
     sum: {
         lineHeight: "10px"
     }
 }))
 
-const Chart = () => {
+const StageTotal = ({title, color, totalSum, totalCount}) => {
     const classes = useStyles();
 
     return (
-    <Box className={classes.root}>
-        <Typography variant={"subtitle2"}>
-            ПЕРВИЧНЫЙ КОНТАКТ
+    <Box className={classes.root} component={Paper}>
+        <Typography className={classes.title} variant={"subtitle2"}>
+            {title}
         </Typography>
-        <Typography variant={"caption"}>
-            0 сделок, 0 ₽
+        <Typography className={classes.title} variant={"caption"}>
+            {totalCount} сделок, {totalSum} ₽
         </Typography>
-        <Divider className={classes.line} style={{backgroundColor: "red"}}/>
+        <Divider className={classNames(classes.line, {[classes[`line${color}`]]: color})}/>
         <Paper className={classes.paper}>
             <Typography variant={"h3"}>
-                0
+                {totalCount}
             </Typography>
             <Typography className={classes.sum}>
-                0 ₽
-            </Typography>
-        </Paper>
-        <Paper className={classNames(classes.paper, classes.paperBottom)}>
-            <Typography>
-                0 сделок, 0 ₽
+                {totalSum} ₽
             </Typography>
         </Paper>
     </Box>
     )
 }
 
-export default Chart
+export default StageTotal

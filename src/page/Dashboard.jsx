@@ -1,161 +1,250 @@
-import React from 'react'
-import {AppBar, Toolbar, Button, InputBase, darken, Typography, Container, Box} from "@material-ui/core";
-import SearchIcon from '@material-ui/icons/Search'
-import SortIcon from '@material-ui/icons/Sort'
+import React, {useEffect, useMemo} from 'react'
+import {
+    Typography,
+    Container,
+    Box, CircularProgress, TableContainer, Table, TableHead, TableCell, TableRow, TableBody,
+} from "@material-ui/core";
 import DateRangeIcon from '@material-ui/icons/DateRange';
 
-import logo from '../assets/img/logo.svg'
 import makeStyles from "@material-ui/core/styles/makeStyles";
 
 import Category from '../components/Category'
-import Chart from "../components/Chart";
+import StageTotal from "../components/StageTotal";
+import Paper from "@material-ui/core/Paper";
+import {useDispatch, useSelector} from "react-redux";
+import {fetchDeals} from "../redux/actions/deals";
+import PieChartCustom from "../components/PieChartCustom";
+import axios from "axios";
+import {fetchEvents} from "../redux/actions/finances";
+import Divider from "@material-ui/core/Divider";
+import classNames from "classnames";
+
 
 const useStyle = makeStyles((theme) => ({
-    dashboard: {
-        height: "100%",
-        backgroundColor: "#2C9AD2",
-        color: '#fff',
+    root: {
+        backgroundColor: "#F5F5F5",
     },
-    appBar: {
-        backgroundColor: "transparent"
-    },
-    search: {
-        position: 'relative',
-        borderRadius: theme.shape.borderRadius,
-        marginLeft: 0,
-        width: '100%',
-    },
-    searchIcon: {
-        padding: theme.spacing(0, 2),
-        height: '100%',
-        position: 'absolute',
-        pointerEvents: 'none',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    inputInput: {
-        padding: theme.spacing(1, 1, 1, 0),
-        paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
-        transition: theme.transitions.create('width'),
-        border: '1px solid #fff',
-    },
-    logo: {
-        marginRight: '27px',
-    },
-    button: {
-        cursor: "pointer",
-        marginLeft: "32px",
-        padding: "6px 32px",
-        boxShadow: "rgba(0, 0, 0, 0.25) 0px 4px 4px 0px",
-        borderRadius: "10px",
-        backgroundColor: "#14314A",
-        color: "#fff",
-        "&:hover": {
-            backgroundColor: darken("#14314A", 0.3)
-        }
-    },
-    SortIcon: {
-        transform: "scaleX(-1)"
-    },
-    container: {
-        paddingTop: "40px",
-        textAlign: "center"
-    },
-    title: {
-        marginBottom: "30px",
-        fontWeight: "700",
-        fontSize: "40px",
-        textShadow: "0 2px 3px rgb(0 0 0 / 25%)"
-    },
-    tabs: {
-        display: "inline-flex",
-        border: "1px solid #fff",
-        borderRadius: "10px"
-    },
-    categoryWrap: {
+    stageBox: {
+        margin: "50px 0",
         display: "flex",
-        justifyContent: "center"
-    },
-    category: {
-        marginRight: theme.spacing(2)
+        alignItems: "center",
+        justifyContent: "space-around"
     },
     chartBox: {
-        marginTop: "60px"
-    },
-    chartItems: {
+        rowGap: "80px",
+        flexWrap: "wrap",
         display: "flex",
-        justifyContent: "center"
+        justifyContent: "space-between"
     },
+    currencyBox: {
+        height: "250px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        marginBottom: "60px"
+    },
+    scoreBox: {
+        height: "100%",
+        padding: "20px",
+        flexBasis: "25%"
+    },
+    scoreItem: {
+        marginTop: "30px"
+    },
+    scoreItemLine: {
+        marginTop: "10px",
+        height: "3px"
+    },
+    scoreBoxTitle: {
+        margin: 0,
+    },
+    scoreItemText: {
+        fontSize: "1.2rem"
+    },
+    exchangeCurrencyBox: {
+        height: "100%",
+        padding: "20px",
+        flexBasis: "65%"
+    },
+    exchangeCurrencyBoxTitle: {
+        margin: 0
+    },
+    loaderBox: {
+        display: "flex",
+        justifyContent: "space-between",
+        height: "250px"
+    },
+    loaderItem: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    loaderItem1: {
+        flexBasis: "25%"
+    },
+    loaderItem2: {
+        flexBasis: "65%"
+    }
 }))
+
+const currencies = ["RUB", "USD", "EUR"]
+const colors = ["Blue", "Yellow", "Orange", "Red"]
+const titles = ["Первичный контракт", "Переговоры", "Принимают решение", "Согласование договора"]
+
+
+const APIKEY = "d0abb51bc6431dcb124e6359c37c10c9"
 
 const Dashboard = () => {
     const classes = useStyle()
+    const dispatch = useDispatch()
+    const [currency, setCurrency] = React.useState(null)
+
+    useEffect(() => {
+        const getCurrency = async () => {
+            try {
+                const request = (await axios.get(`http://data.fixer.io/api/latest?access_key=${APIKEY}&symbols=EUR,USD,RUB`))
+                if (request.status !== 200) return
+                setCurrency({rates: request.data.rates, date: request.data.date})
+            } catch (err) {
+                console.log(err)
+            }
+        }
+
+        getCurrency()
+        dispatch(fetchEvents())
+        dispatch(fetchDeals())
+
+    }, []);
+
+
+    const deals = useSelector(({deals}) => deals.items)
+    const events = useSelector(({finances}) => finances.items)
+    const eventsIsLoaded = useSelector(({finances}) => finances.isLoaded)
+    const dealsIsLoaded = useSelector(({deals}) => deals.isLoaded)
+
+    const getScoreBase = currency && events?.reduce((acc, item) => acc + item.sum / currency.rates[item.currency], 0)
+
+    const getScoreCurrency = (value, cur) => {
+        return new Intl.NumberFormat("ru-RU", {style: "currency", "currency": cur})
+            .format(value)
+    }
+
+    const getCurrency = (cur) => +(getScoreBase * currency.rates[cur]).toFixed(2)
+
+    const getDate = (value) => {
+        const options = {}
+
+        options.day = '2-digit'
+        options.month = 'long'
+        options.year = 'numeric'
+
+        return new Intl.DateTimeFormat('ru-RU', options).format(new Date(value))
+    }
+
+    const filterDate = ()
+
+    const dataDealsSum = useMemo(() => {
+        return Object.entries(deals).map(([key, val]) => ({name: key, value: val.totalSum}))
+    }, [dealsIsLoaded])
+
+    const dataDealsCount = useMemo(() => {
+        return Object.entries(deals).map(([key, val]) => ({name: key, value: val.totalCount}))
+    }, [dealsIsLoaded])
+
+    const dataEventIncome = useMemo(() => {
+        return events.filter(item => item.type === "income").map(item => ({name: item.currency, value: +item.sum}))
+    }, [dealsIsLoaded])
+
+    const dataEventConsumption = useMemo(() => {
+        return events.filter(item => item.type === "consumption").map(item => ({name: item.currency, value: +item.sum}))
+    }, [dealsIsLoaded])
 
     return (
-        <div className={classes.dashboard}>
-            <AppBar className={classes.appBar} position="static">
-                <Toolbar>
-                    <img className={classes.logo} src={logo} alt=""/>
-                    <div className={classes.search}>
-                        <div className={classes.searchIcon}>
-                            <SearchIcon/>
-                        </div>
-                        <InputBase
-                            classes={{
-                                input: classes.inputInput
-                            }}
-                            fullWidth={true}
-                            placeholder="Поиск"
-                            inputProps={{'aria-label': 'search'}}
+        <Box className={classes.root}>
+            <Container className={classes.container}>
+                <Typography className={classes.title} align={"center"} variant={"body1"}>
+                    grantgalaxys321310e
+                </Typography>
+                <Box className={classes.categoryWrap}>
+                    <Category
+                        items={[
+                            {title: "Сегодня"},
+                            {title: "Вчера"},
+                            {title: "Неделя"},
+                            {title: "Месяц"},
+                            {title: "Период", icon: <DateRangeIcon fontSize="small"/>}
+                        ]}
+                    />
+                </Box>
+                <Box className={classes.stageBox}>
+                    {Object.entries(deals).map(([key, item], index) => (
+                        <StageTotal
+                            key={key}
+                            title={titles[index]}
+                            color={colors[index]}
+                            totalSum={item.totalSum}
+                            totalCount={item.totalCount}
                         />
-                    </div>
-                    <Button
-                        classes={classes.button}
-                        variant="contained"
-                        className={classes.button}
-                        startIcon={<SortIcon/>}
-                    >
-                        СОБЫТИЯ
-                    </Button>
-                </Toolbar>
-            </AppBar>
-            <Box>
-                <Container className={classes.container}>
-                    <Typography className={classes.title} align={"center"} variant={"body1"}>
-                        grantgalaxys321310e
-                    </Typography>
-                    <Box className={classes.categoryWrap}>
-                        <Category
-                            className={classes.category}
-                            items={[
-                                {title: "Сегодня"},
-                                {title: "Вчера"},
-                                {title: "Неделя"},
-                                {title: "Месяц"},
-                                {title: "Период", icon: <DateRangeIcon fontSize="small"/>}
-                            ]}
-                        />
-                        <Category
-                            items={[
-                                {title: "Все"},
-                                {title: "Мои"}
-                            ]}
-                        />
+                    ))}
+                </Box>
+                {!currency
+                    ?
+                    <Box className={classes.loaderBox}>
+                        <Box className={classNames(classes.loaderItem, classes.loaderItem1)}>
+                            <CircularProgress size={200}/>
+                        </Box>
+                        <Box className={classNames(classes.loaderItem, classes.loaderItem2)}>
+                            <CircularProgress size={200}/>
+                        </Box>
                     </Box>
-                </Container>
-            </Box>
-            <Box className={classes.chartBox}>
-                <Container>
-                    <Box className={classes.chartItems}>
-                        <Chart />
-                        <Chart />
-                        <Chart />
-                        <Chart />
+                    :
+                    <Box className={classes.currencyBox}>
+                        <Box className={classes.scoreBox} component={Paper}>
+                            <h2 className={classes.scoreBoxTitle}>Счет в валюте</h2>
+                            {currencies.map(item => (
+                                <Box key={item} className={classes.scoreItem}>
+                                    <Typography
+                                        className={classes.scoreItemText}>{getScoreCurrency(getCurrency(item), item)}</Typography>
+                                    <Divider className={classes.scoreItemLine}/>
+                                </Box>
+                            ))}
+                        </Box>
+                        <Box className={classes.exchangeCurrencyBox} component={Paper}>
+                            <h2 className={classes.exchangeCurrencyBoxTitle}>Курс валют</h2>
+                            <TableContainer>
+                                <Table>
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>Валюта</TableCell>
+                                            <TableCell>Курс</TableCell>
+                                            <TableCell>Дата</TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {
+                                            Object.entries(currency.rates).map(([key, value]) => (
+                                                <TableRow key={key}>
+                                                    <TableCell>{key}</TableCell>
+                                                    <TableCell>{value}</TableCell>
+                                                    <TableCell>{getDate(currency.date)}</TableCell>
+                                                </TableRow>
+                                            ))
+                                        }
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Box>
                     </Box>
-                </Container>
-            </Box>
-        </div>
+                }
+                <Box className={classes.chartBox}>
+                    <PieChartCustom title={"Сделки(сумма)"} isLoaded={dealsIsLoaded} data={dataDealsSum} char={"₽"}/>
+                    <PieChartCustom title={"Сделки(количество)"} isLoaded={dealsIsLoaded} data={dataDealsCount}
+                                    char={"шт."}/>
+                    <PieChartCustom title={"Доход"} isLoaded={eventsIsLoaded} data={dataEventIncome}/>
+                    <PieChartCustom title={"Расход"} isLoaded={eventsIsLoaded} data={dataEventConsumption}/>
+                </Box>
+            </Container>
+        </Box>
     )
 }
 

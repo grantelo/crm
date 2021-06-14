@@ -50,7 +50,6 @@ const useStyles = makeStyles(() => ({
 
 const PipeLine = ({deals, title, pipeLineId, color, showPopup, showDialog, onClickDeleteDeal, onClearDeals}) => {
     const classes = useStyles()
-
     return (
         <Box className={classes.root}>
             {!!deals.totalCount && <IconButton onClick={() => showDialog({...DIALOG_CLEAR_DEALS(title), dialogProps: pipeLineId, handleCloseDialogAgree: onClearDeals})}

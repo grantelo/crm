@@ -1,23 +1,23 @@
 import axios from "axios";
 import {
     ADD_CONTACT,
-    CLEAR_CONTACT,
     CLEAR_CONTACTS,
     EDIT_CONTACT,
     REMOVE_CONTACT,
     SET_CONTACTS,
-    SET_LOADED
+    SET_LOADED_CONTACTS
 } from "../types";
 
 
 export const fetchContact = () => dispatch => {
+    dispatch(setLoadedContacts(false))
     axios
         .get("/contacts")
         .then(({data}) => dispatch(setContacts(data)))
 }
 
 export const fetchAddContact = (data) => dispatch => {
-    dispatch(setLoaded(false))
+    dispatch(setLoadedContacts(false))
     return axios
         .post("/contacts", data)
         .then(resolve => {
@@ -27,7 +27,7 @@ export const fetchAddContact = (data) => dispatch => {
 }
 
 export const fetchEditContact = (data) => dispatch => {
-    dispatch(setLoaded(false))
+    dispatch(setLoadedContacts(false))
     return axios
         .patch(`/contacts/${data.id}/`, {[data.obj.key]: data.obj.value})
         .then(resolve => {
@@ -38,7 +38,7 @@ export const fetchEditContact = (data) => dispatch => {
 
 
 export const fetchRemoveContact = id => dispatch => {
-    dispatch(setLoaded(false))
+    dispatch(setLoadedContacts(false))
     return axios
         .delete(`/contacts/${id}`)
         .then(resolve => {
@@ -50,7 +50,7 @@ export const fetchRemoveContact = id => dispatch => {
 
 export const fetchClearContacts = () => (dispatch, getState) => {
     const {contacts} = getState()
-    dispatch(setLoaded(false))
+    dispatch(setLoadedContacts(false))
     return Promise.all(contacts.items.map(item => axios.delete(`contacts/${item.id}`)))
         .then(resolve => {
             dispatch(clearContacts())
@@ -58,8 +58,8 @@ export const fetchClearContacts = () => (dispatch, getState) => {
         })
 }
 
-export const setLoaded = payload => ({
-    type: SET_LOADED,
+export const setLoadedContacts = payload => ({
+    type: SET_LOADED_CONTACTS,
     payload
 })
 

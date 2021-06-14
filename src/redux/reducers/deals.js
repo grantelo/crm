@@ -1,4 +1,12 @@
-import {ADD_DEAL, CLEAR_DEALS, REMOVE_DEAL, SET_DEAL, SET_LOADED} from "../types";
+import {
+    ADD_DEAL,
+    CLEAR_DEALS,
+    REMOVE_DEAL,
+    SET_DEAL,
+    SET_LOADED,
+    SET_LOADED_CONTACTS,
+    SET_LOADED_DEALS
+} from "../types";
 import {act} from "@testing-library/react";
 
 const initialState = {
@@ -10,6 +18,13 @@ const getSum = (objs) => objs.reduce((sum, item) => item.sum + sum, 0)
 
 const deals = (state = initialState, action) => {
     switch (action.type) {
+        case SET_LOADED_DEALS: {
+            return {
+                isLoaded: action.payload,
+                items: state.items
+            }
+        }
+
         case SET_DEAL:
             const sums = Object.entries(action.payload).map(([key, value]) => {
                 return {
@@ -24,6 +39,7 @@ const deals = (state = initialState, action) => {
                     totalCount: Object.keys(value).length
                 }
             }))
+
             return {
                 ...state,
                 items: Object.assign({}, ...items),

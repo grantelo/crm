@@ -1,22 +1,31 @@
 import axios from "axios";
-import {ADD_EVENT, SET_EVENTS, SET_LOADED} from "../types";
+import {ADD_EVENT, DELETE_EVENT, SET_EVENTS, SET_LOADED, SET_LOADED_EVENTS} from "../types";
 
 export const fetchEvents = () => (dispatch) => {
-    dispatch(setLoaded(false))
+    dispatch(setLoadedEvents(false))
     return axios
         .get("/events")
         .then(({data}) => {
-            console.log(data)
             dispatch(setEvents(data))
         })
 }
 
 export const fetchAddEvent = (data) => (dispatch) => {
-    dispatch(setLoaded(false))
+    dispatch(setLoadedEvents(false))
     return axios
         .post("/events", data)
         .then(resolve => {
-            dispatch(setEvents(resolve.data))
+            dispatch(addEvent(resolve.data))
+            return resolve
+        })
+}
+
+export const fetchDeleteEvent = (id) => (dispatch) => {
+    dispatch(setLoadedEvents(false))
+    return axios
+        .delete(`/events/${id}`)
+        .then(resolve => {
+            dispatch(deleteEvent(id))
             return resolve
         })
 }
@@ -26,12 +35,17 @@ export const setEvents = payload => ({
     payload
 })
 
-export const addEvents = payload => ({
+export const addEvent = payload => ({
     type: ADD_EVENT,
     payload
 })
 
-export const setLoaded = payload => ({
-    type: SET_LOADED,
+export const deleteEvent = payload => ({
+    type: DELETE_EVENT,
+    payload
+})
+
+export const setLoadedEvents = payload => ({
+    type: SET_LOADED_EVENTS,
     payload
 })

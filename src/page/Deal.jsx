@@ -11,12 +11,9 @@ import AddDealForm from "../components/AddDealForm";
 import {useDispatch, useSelector} from "react-redux";
 import {
     fetchClearDeals,
-    fetchDeal,
     fetchDeals,
     fetchRemoveDeal,
-    removeDeal,
-    setDeal,
-    setLoaded
+    setLoadedDeals
 } from "../redux/actions/deals";
 import PopupNotification from "../components/PopupNotification";
 import {DIALOG_CLEAR_DEALS, REMOVE_DEAL_ERROR, REMOVE_DEAL_SUCCESS, REMOVE_ERROR, REMOVE_SUCCESS} from "../types";
@@ -58,7 +55,7 @@ const Deal = ({showDialog, showPopup, handleCloseDialog}) => {
                 showPopup(REMOVE_ERROR)
             })
             .catch(() => {
-                setLoaded(true)
+                setLoadedDeals(true)
                 showPopup(REMOVE_ERROR)
             })
     }
@@ -76,7 +73,7 @@ const Deal = ({showDialog, showPopup, handleCloseDialog}) => {
             })
             .catch((err) => {
                 console.log(err)
-                setLoaded(true)
+                setLoadedDeals(true)
                 showPopup(REMOVE_ERROR)
             })
     }
@@ -85,7 +82,7 @@ const Deal = ({showDialog, showPopup, handleCloseDialog}) => {
         <Box className={classes.root}>
             <Container>
                 <Box className={classes.pipeLineBox}>
-                    {isLoaded && titles.map((item, index) => (
+                    {isLoaded && titles?.map((item, index) => (
                         <PipeLine
                             key={item}
                             deals={deals[ids[index]]}

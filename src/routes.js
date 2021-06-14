@@ -5,6 +5,7 @@ import Dashboard from "./page/Dashboard";
 import Contacts from "./page/Contacts";
 import Deal from "./page/Deal";
 import Finance from "./page/Finance";
+import DetailPage from "./page/DetailPage";
 
 const useRoutes = (props) => (
     <Switch>
@@ -12,6 +13,7 @@ const useRoutes = (props) => (
         <Route path="/contacts"><Contacts {...props}/></Route>
         <Route path="/deal"><Deal {...props}></Deal></Route>
         <Route path="/finance"><Finance {...props}></Finance></Route>
+        <Route path="/details/:id"><DetailPage/></Route>
     </Switch>
 )
 

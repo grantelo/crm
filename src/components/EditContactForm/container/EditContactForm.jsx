@@ -3,7 +3,7 @@ import {withFormik} from "formik";
 import * as yup from "yup";
 import {connect} from "react-redux";
 import AddContactForm from "../component/AddContactForm";
-import {fetchAddContact, setLoaded} from "../../../redux/actions/contacts";
+import {fetchAddContact, setLoadedContacts} from "../../../redux/actions/contacts";
 import {ADD_ERROR, ADD_SUCCESS} from "../../../types";
 
 const validationSchema = yup.object({
@@ -65,7 +65,7 @@ export default connect()(withFormik({
             .catch(err => {
                 console.log(err)
                 props.closeDialog()
-                props.dispatch(setLoaded(true))
+                props.dispatch(setLoadedContacts(true))
                 props.showPopup(ADD_ERROR)
             })
     }

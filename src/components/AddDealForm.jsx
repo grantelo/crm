@@ -16,9 +16,9 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import Input from "@material-ui/core/Input";
 import {useDispatch} from "react-redux";
 import {ADD_DEAL} from "../redux/types";
-import {fetchAddDeal, setLoaded} from "../redux/actions/deals";
+import {fetchAddDeal, setLoaded, setLoadedDeals} from "../redux/actions/deals";
 import {ADD_ERROR, ADD_SUCCESS} from "../types";
-import {fetchAddContact} from "../redux/actions/contacts";
+import {fetchAddContact, setLoadedContacts} from "../redux/actions/contacts";
 import {pickBy} from "lodash/object";
 
 
@@ -196,15 +196,14 @@ const AddDealForm = ({active, onCloseForm, pipeLineId, showPopup}) => {
                     return resolve
                 })
                 .then(resolve => {
-                        console.log(resolve)
-                        dispatch(fetchAddContact(pickBy(resolve.data, (value, key) => key !== 'sum' && key !== 'date')))
+                        dispatch(fetchAddContact(pickBy(resolve.data, (value, key) => key !== 'sum' && key !== 'date' && key !== "id")))
                         return resolve
                     }
                 )
-
                 .catch((err) => {
                     console.log(err)
-                    setLoaded(true)
+                    dispatch(setLoadedDeals(true))
+                    dispatch(setLoadedContacts(true))
                     showPopup(ADD_ERROR)
                 })
         }
