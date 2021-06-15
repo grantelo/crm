@@ -5,9 +5,8 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import {green, red} from "@material-ui/core/colors";
 import classNames from "classnames";
 import {format} from "date-fns";
-import {ru} from "date-fns/locale";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles( () => ({
     root: {
         color: "#fff",
         padding: "20px",

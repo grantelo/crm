@@ -4,11 +4,9 @@ import {
     Container,
     Box, CircularProgress, TableContainer, Table, TableHead, TableCell, TableRow, TableBody,
 } from "@material-ui/core";
-import DateRangeIcon from '@material-ui/icons/DateRange';
 
 import makeStyles from "@material-ui/core/styles/makeStyles";
 
-import Category from '../components/Category'
 import StageTotal from "../components/StageTotal";
 import Paper from "@material-ui/core/Paper";
 import {useDispatch, useSelector} from "react-redux";
@@ -23,9 +21,10 @@ import classNames from "classnames";
 const useStyle = makeStyles((theme) => ({
     root: {
         backgroundColor: "#F5F5F5",
+        padding: "100px"
     },
     stageBox: {
-        margin: "50px 0",
+        marginBottom: "50px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-around"
@@ -111,8 +110,8 @@ const Dashboard = () => {
         }
 
         getCurrency()
-        dispatch(fetchEvents())
         dispatch(fetchDeals())
+        dispatch(fetchEvents())
 
     }, []);
 
@@ -141,41 +140,40 @@ const Dashboard = () => {
         return new Intl.DateTimeFormat('ru-RU', options).format(new Date(value))
     }
 
-    const filterDate = ()
 
     const dataDealsSum = useMemo(() => {
-        return Object.entries(deals).map(([key, val]) => ({name: key, value: val.totalSum}))
+        return Object.entries(deals).map(([key, val]) => ({name: key, value: val.totalSum, date: new Date(val.date)}))
     }, [dealsIsLoaded])
 
     const dataDealsCount = useMemo(() => {
-        return Object.entries(deals).map(([key, val]) => ({name: key, value: val.totalCount}))
+        return Object.entries(deals).map(([key, val]) => ({name: key, value: val.totalCount, date: new Date(val.date)}))
     }, [dealsIsLoaded])
 
     const dataEventIncome = useMemo(() => {
-        return events.filter(item => item.type === "income").map(item => ({name: item.currency, value: +item.sum}))
-    }, [dealsIsLoaded])
+        return events.filter(item => item.type === "income").map(item => ({name: item.currency, value: +item.sum, date: new Date(item.date)}))
+    }, [eventsIsLoaded])
 
     const dataEventConsumption = useMemo(() => {
-        return events.filter(item => item.type === "consumption").map(item => ({name: item.currency, value: +item.sum}))
-    }, [dealsIsLoaded])
+        return events.filter(item => item.type === "consumption").map(item => ({name: item.currency, value: +item.sum, date: new Date(item.date)}))
+    }, [eventsIsLoaded])
 
     return (
         <Box className={classes.root}>
-            <Container className={classes.container}>
-                <Typography className={classes.title} align={"center"} variant={"body1"}>
-                    grantgalaxys321310e
-                </Typography>
-                <Box className={classes.categoryWrap}>
-                    <Category
-                        items={[
-                            {title: "Сегодня"},
-                            {title: "Вчера"},
-                            {title: "Неделя"},
-                            {title: "Месяц"},
-                            {title: "Период", icon: <DateRangeIcon fontSize="small"/>}
-                        ]}
-                    />
-                </Box>
+            <Container>
+                {/*<Typography className={classes.title} align={"center"} variant={"body1"}>*/}
+                {/*    grantgalaxys321310e*/}
+                {/*</Typography>*/}
+                {/*<Box className={classes.categoryWrap}>*/}
+                {/*    <Category*/}
+                {/*        items={[*/}
+                {/*            {title: "Сегодня"},*/}
+                {/*            {title: "Вчера"},*/}
+                {/*            {title: "Неделя"},*/}
+                {/*            {title: "Месяц"},*/}
+                {/*            {title: "Период", icon: <DateRangeIcon fontSize="small"/>}*/}
+                {/*        ]}*/}
+                {/*    />*/}
+                {/*</Box>*/}
                 <Box className={classes.stageBox}>
                     {Object.entries(deals).map(([key, item], index) => (
                         <StageTotal

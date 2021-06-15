@@ -6,11 +6,9 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import {Box} from "@material-ui/core";
 import PopupNotification from "./components/PopupNotification";
 import AlertDialog from "./components/AlertDialog";
-import {fetchClearDeals, fetchRemoveDeal, setLoaded} from "./redux/actions/deals";
-import {REMOVE_ERROR, REMOVE_SUCCESS} from "./types";
-import {useDispatch} from "react-redux";
 
-const useStyles = makeStyles(theme => ({
+
+const useStyles = makeStyles(() => ({
     root: {
         display: "flex"
     },

@@ -1,5 +1,5 @@
 import axios from "axios";
-import {ADD_DEAL, CLEAR_DEALS, REMOVE_DEAL, SET_DEAL, SET_LOADED, SET_LOADED_DEALS} from "../types";
+import {ADD_DEAL, CLEAR_DEALS, REMOVE_DEAL, SET_DEAL,SET_LOADED_DEALS} from "../types";
 
 export const fetchDeals = () => (dispatch) => {
     dispatch(setLoadedDeals(false))

@@ -22,7 +22,6 @@ const contacts = (state = initialState, action) => {
         }
 
         case SET_CONTACTS: {
-            console.log(action.payload)
             return {
                 items: action.payload,
                 isLoaded: true

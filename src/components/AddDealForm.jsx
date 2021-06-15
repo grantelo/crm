@@ -1,6 +1,5 @@
 import React from 'react'
 import classNames from 'classnames'
-import {pick} from 'lodash'
 
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
@@ -13,10 +12,8 @@ import {useFormik} from "formik";
 import NumberFormat from 'react-number-format';
 import FormControl from "@material-ui/core/FormControl";
 import FormHelperText from "@material-ui/core/FormHelperText";
-import Input from "@material-ui/core/Input";
 import {useDispatch} from "react-redux";
-import {ADD_DEAL} from "../redux/types";
-import {fetchAddDeal, setLoaded, setLoadedDeals} from "../redux/actions/deals";
+import {fetchAddDeal, setLoadedDeals} from "../redux/actions/deals";
 import {ADD_ERROR, ADD_SUCCESS} from "../types";
 import {fetchAddContact, setLoadedContacts} from "../redux/actions/contacts";
 import {pickBy} from "lodash/object";

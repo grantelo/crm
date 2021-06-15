@@ -1,13 +1,10 @@
-import React, {useEffect, useState} from 'react'
-import axios from "axios";
+import React, {useEffect} from 'react'
 
 import PipeLine from "../components/PipeLine";
-import AddDeal from "../components/AddDeal";
 
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import AddDealForm from "../components/AddDealForm";
 import {useDispatch, useSelector} from "react-redux";
 import {
     fetchClearDeals,
@@ -15,15 +12,13 @@ import {
     fetchRemoveDeal,
     setLoadedDeals
 } from "../redux/actions/deals";
-import PopupNotification from "../components/PopupNotification";
-import {DIALOG_CLEAR_DEALS, REMOVE_DEAL_ERROR, REMOVE_DEAL_SUCCESS, REMOVE_ERROR, REMOVE_SUCCESS} from "../types";
-import AlertDialog from "../components/AlertDialog";
+import {REMOVE_ERROR, REMOVE_SUCCESS} from "../types";
 
 const titles = ['ПЕРВИЧНЫЙ КОНТАКТ', 'ПЕРЕГОВОРЫ', 'ПРИНИМАЮТ РЕШЕНИЕ', 'СОГЛАСОВАНИЕ ДОГОВОРА']
 const ids = ["primaryContact", "conversation", "makeDecisions", "accept"]
 const colors = ["Blue", "Yellow", "Orange", "Red"]
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles( () => ({
     root: {
         height: "100vh",
         paddingTop: "30px",

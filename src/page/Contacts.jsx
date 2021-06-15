@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react'
 import {GridOverlay} from "@material-ui/data-grid";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {DataGrid} from "@material-ui/data-grid";
-import {Box, darken, Tooltip} from "@material-ui/core";
+import {Box, Tooltip} from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -21,21 +21,15 @@ import {
     fetchRemoveContact,
     setLoadedContacts
 } from "../redux/actions/contacts";
-import EditIcon from '@material-ui/icons/Edit';
 import IconButton from "@material-ui/core/IconButton";
-import {CLEAR_CONTACTS, REMOVE_CONTACT} from "../redux/types";
 import {
     DIALOG_CLEAR_CONTACTS,
-    DIALOG_CLEAR_DEALS, EDIT_ERROR,
+    EDIT_ERROR,
     EDIT_SUCCESS,
-    REMOVE_DEAL_ERROR,
-    REMOVE_DEAL_SUCCESS,
     REMOVE_ERROR,
     REMOVE_SUCCESS
 } from "../types";
-import {fetchClearDeals} from "../redux/actions/deals";
 import AddContactForm from '../components/AddContactForm/index'
-import EditContactForm from "../components/EditContactForm";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -347,7 +341,7 @@ const Contacts = ({showPopup, showDialog, handleCloseDialog}) => {
     }
 
     const handleChangeValue = (e) => {
-        setValue(prevState => e.target.value)
+        setValue(e.target.value)
     }
 
     const checkInclude = (str1, str2) => str1.startsWith(str2) || str1.endsWith(str2)
@@ -420,12 +414,11 @@ const Contacts = ({showPopup, showDialog, handleCloseDialog}) => {
                     </Toolbar>
                 </Container>
             </AppBar>
-            <Box>
-                <Container>
+            <Box style={{ maxHeight: "80vh", width: '100%', height: "100%" }}>
+                <Container style={{ height: "100%"}}>
                     <DataGrid
                         className={classes.dataGrid}
                         rows={filterContacts(value)}
-                        autoHeight
                         columns={columns}
                         components={{
                             NoRowsOverlay: CustomNoRowsOverlay

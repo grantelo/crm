@@ -3,11 +3,8 @@ import {
     CLEAR_DEALS,
     REMOVE_DEAL,
     SET_DEAL,
-    SET_LOADED,
-    SET_LOADED_CONTACTS,
     SET_LOADED_DEALS
 } from "../types";
-import {act} from "@testing-library/react";
 
 const initialState = {
     items: {},
@@ -35,7 +32,7 @@ const deals = (state = initialState, action) => {
             const items = Object.entries(action.payload).map(([key, value]) => ({
                 [key]: {
                     items: [...value],
-                    totalSum: Object.values(sums.find(item => Object.keys(item)[0] == key))[0],
+                    totalSum: Object.values(sums.find(item => Object.keys(item)[0] === key))[0],
                     totalCount: Object.keys(value).length
                 }
             }))

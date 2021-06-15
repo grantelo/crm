@@ -4,8 +4,6 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import CancelIcon from '@material-ui/icons/Cancel';
-import {connect} from "react-redux";
 import NumberFormat from "react-number-format";
 
 const useStyle = makeStyles((theme) => ({
@@ -138,7 +136,6 @@ const AddContactForm = props => {
                     type={"submit"}
                     variant={"contained"}
                     color={"primary"}
-                    disabled={isSubmitting}
                 >
                     Добавить контакт
                 </Button>

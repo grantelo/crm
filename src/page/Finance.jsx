@@ -12,10 +12,8 @@ import AddIcon from "@material-ui/icons/Add";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import AddEventForm from "../components/AddEventForm/index"
 import DeleteIcon from "@material-ui/icons/Delete";
-import IconButton from "@material-ui/core/IconButton";
 import {Link} from "react-router-dom";
 import {format} from "date-fns";
-import {ru} from "date-fns/esm/locale";
 import Paper from "@material-ui/core/Paper";
 import {REMOVE_ERROR, REMOVE_SUCCESS} from "../types";
 

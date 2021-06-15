@@ -183,11 +183,29 @@
     {
       "category": "Зарплата",
       "type": "income",
-      "sum": 3213,
+      "sum": "500",
       "currency": "RUB",
-      "description": "eqwewqe",
-      "date": "2021-06-09T16:49:57.928Z",
+      "description": "weqewqewq",
+      "date": "2021-06-14T19:34:04.470Z",
       "id": 1
+    },
+    {
+      "category": "Зарплата",
+      "type": "income",
+      "sum": "1000",
+      "currency": "RUB",
+      "description": "weqewqewq",
+      "date": "2021-06-09T21:50:39.164Z",
+      "id": 2
+    },
+    {
+      "category": "Отпуск",
+      "type": "consumption",
+      "sum": "12321",
+      "currency": "RUB",
+      "description": "312321",
+      "date": "2021-06-14T20:20:34.384Z",
+      "id": 3
     }
   ]
 }

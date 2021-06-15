@@ -1,5 +1,5 @@
 import axios from "axios";
-import {ADD_EVENT, DELETE_EVENT, SET_EVENTS, SET_LOADED, SET_LOADED_EVENTS} from "../types";
+import {ADD_EVENT, DELETE_EVENT, SET_EVENTS, SET_LOADED_EVENTS} from "../types";
 
 export const fetchEvents = () => (dispatch) => {
     dispatch(setLoadedEvents(false))

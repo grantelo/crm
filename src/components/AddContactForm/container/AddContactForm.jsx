@@ -1,9 +1,8 @@
-import React from 'react';
 import {withFormik} from "formik";
 import * as yup from "yup";
 import {connect} from "react-redux";
 import AddContactForm from "../component/AddContactForm";
-import {fetchAddContact, setLoaded, setLoadedContacts} from "../../../redux/actions/contacts";
+import {fetchAddContact, setLoadedContacts} from "../../../redux/actions/contacts";
 import {ADD_ERROR, ADD_SUCCESS} from "../../../types";
 
 const validationSchema = yup.object({
@@ -51,7 +50,7 @@ export default connect()(withFormik({
     validationSchema: validationSchema,
 
     handleSubmit: (values, {props, setSubmitting}) => {
-            props.dispatch(fetchAddContact(values))
+            props.dispatch(fetchAddContact({...values, date: new Date()}))
             .then(({status}) => {
                 props.closeDialog()
                 if (status === 201) {

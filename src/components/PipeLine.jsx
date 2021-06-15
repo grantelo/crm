@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import classNames from 'classnames'
 
 import AddDeal from "./AddDeal";
@@ -8,11 +8,9 @@ import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import PipeLineItem from "./PipeLineItem";
-import PopupNotification from "./PopupNotification";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
-import {DIALOG_CLEAR_DEALS, REMOVE_ERROR, REMOVE_SUCCESS} from "../types";
-import {fetchClearDeals, fetchRemoveDeal, setLoaded} from "../redux/actions/deals";
+import {DIALOG_CLEAR_DEALS} from "../types";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -52,9 +50,16 @@ const PipeLine = ({deals, title, pipeLineId, color, showPopup, showDialog, onCli
     const classes = useStyles()
     return (
         <Box className={classes.root}>
-            {!!deals.totalCount && <IconButton onClick={() => showDialog({...DIALOG_CLEAR_DEALS(title), dialogProps: pipeLineId, handleCloseDialogAgree: onClearDeals})}
-                                               className={classes.iconButton}><DeleteIcon
-                color={"secondary"}/></IconButton>}
+            {!!deals.totalCount && <IconButton
+                onClick={() => showDialog({
+                    ...DIALOG_CLEAR_DEALS(title),
+                    dialogProps: pipeLineId,
+                    handleCloseDialogAgree: onClearDeals
+                })}
+                className={classes.iconButton}
+            ><DeleteIcon
+                color={"secondary"}
+            /></IconButton>}
             <Typography variant={"subtitle2"}>
                 {title}
             </Typography>
@@ -62,10 +67,20 @@ const PipeLine = ({deals, title, pipeLineId, color, showPopup, showDialog, onCli
                 {`${deals.totalCount} сделок: ${deals.totalSum} руб`}
             </Typography>
             <Divider className={classNames(classes.line, {[classes[`line${color}`]]: color})}/>
-            <AddDeal pipeLineId={pipeLineId} showPopup={showPopup}/>
+            <AddDeal
+                pipeLineId={pipeLineId}
+                showPopup={showPopup}
+            />
             {deals.items.map(item => {
-                return <PipeLineItem {...item} pipeLineId={pipeLineId} showPopup={showPopup}
-                                     onClickDeleteDeal={onClickDeleteDeal}/>
+                return (
+                <PipeLineItem
+                    key={item.id}
+                    {...item}
+                    pipeLineId={pipeLineId}
+                    showPopup={showPopup}
+                    onClickDeleteDeal={onClickDeleteDeal}
+                />
+                )
             })}
         </Box>
     )

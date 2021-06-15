@@ -1,10 +1,10 @@
 import React from 'react'
-import {Box, List, ListItem, ListItemIcon, ListItemText, fade} from "@material-ui/core";
+import {Box, List, ListItem, ListItemIcon, ListItemText} from "@material-ui/core";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import classNames from 'classnames'
 
 
-const useStyle = makeStyles((theme) => ({
+const useStyle = makeStyles( () => ({
     root: {
         display: "flex",
         justifyContent: "center",

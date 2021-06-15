@@ -1,8 +1,6 @@
 import {connect} from "react-redux";
 import {withFormik} from "formik";
-import {fetchAddContact, setLoaded} from "../../../redux/actions/contacts";
 import {ADD_ERROR, ADD_SUCCESS} from "../../../types";
-import AddContactForm from "../../AddContactForm/component/AddContactForm";
 import * as yup from "yup";
 import {fetchAddEvent, setLoadedEvents} from "../../../redux/actions/finances";
 import AddEventForm from "../component/AddEventForm";
