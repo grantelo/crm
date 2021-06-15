@@ -150,11 +150,19 @@ const Dashboard = () => {
     }, [dealsIsLoaded])
 
     const dataEventIncome = useMemo(() => {
-        return events.filter(item => item.type === "income").map(item => ({name: item.currency, value: +item.sum, date: new Date(item.date)}))
+        return events.filter(item => item.type === "income").map(item => ({
+            name: item.currency,
+            value: +item.sum,
+            date: new Date(item.date)
+        }))
     }, [eventsIsLoaded])
 
     const dataEventConsumption = useMemo(() => {
-        return events.filter(item => item.type === "consumption").map(item => ({name: item.currency, value: +item.sum, date: new Date(item.date)}))
+        return events.filter(item => item.type === "consumption").map(item => ({
+            name: item.currency,
+            value: +item.sum,
+            date: new Date(item.date)
+        }))
     }, [eventsIsLoaded])
 
     return (
@@ -185,61 +193,79 @@ const Dashboard = () => {
                         />
                     ))}
                 </Box>
-                {!currency
-                    ?
-                    <Box className={classes.loaderBox}>
-                        <Box className={classNames(classes.loaderItem, classes.loaderItem1)}>
-                            <CircularProgress size={200}/>
-                        </Box>
-                        <Box className={classNames(classes.loaderItem, classes.loaderItem2)}>
-                            <CircularProgress size={200}/>
-                        </Box>
+                {currency
+                &&
+                <Box className={classes.currencyBox}>
+                    <Box
+                        className={classes.scoreBox}
+                        component={Paper}
+                    >
+                        <h2 className={classes.scoreBoxTitle}>Счет в валюте</h2>
+                        {currencies.map(item => (
+                            <Box
+                                key={item}
+                                className={classes.scoreItem}
+                            >
+                                <Typography
+                                    className={classes.scoreItemText}
+                                >{getScoreCurrency(getCurrency(item), item)}</Typography>
+                                <Divider className={classes.scoreItemLine}/>
+                            </Box>
+                        ))}
                     </Box>
-                    :
-                    <Box className={classes.currencyBox}>
-                        <Box className={classes.scoreBox} component={Paper}>
-                            <h2 className={classes.scoreBoxTitle}>Счет в валюте</h2>
-                            {currencies.map(item => (
-                                <Box key={item} className={classes.scoreItem}>
-                                    <Typography
-                                        className={classes.scoreItemText}>{getScoreCurrency(getCurrency(item), item)}</Typography>
-                                    <Divider className={classes.scoreItemLine}/>
-                                </Box>
-                            ))}
-                        </Box>
-                        <Box className={classes.exchangeCurrencyBox} component={Paper}>
-                            <h2 className={classes.exchangeCurrencyBoxTitle}>Курс валют</h2>
-                            <TableContainer>
-                                <Table>
-                                    <TableHead>
-                                        <TableRow>
-                                            <TableCell>Валюта</TableCell>
-                                            <TableCell>Курс</TableCell>
-                                            <TableCell>Дата</TableCell>
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {
-                                            Object.entries(currency.rates).map(([key, value]) => (
-                                                <TableRow key={key}>
-                                                    <TableCell>{key}</TableCell>
-                                                    <TableCell>{value}</TableCell>
-                                                    <TableCell>{getDate(currency.date)}</TableCell>
-                                                </TableRow>
-                                            ))
-                                        }
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </Box>
+                    <Box
+                        className={classes.exchangeCurrencyBox}
+                        component={Paper}
+                    >
+                        <h2 className={classes.exchangeCurrencyBoxTitle}>Курс валют</h2>
+                        <TableContainer>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Валюта</TableCell>
+                                        <TableCell>Курс</TableCell>
+                                        <TableCell>Дата</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {
+                                        Object.entries(currency.rates).map(([key, value]) => (
+                                            <TableRow key={key}>
+                                                <TableCell>{key}</TableCell>
+                                                <TableCell>{value}</TableCell>
+                                                <TableCell>{getDate(currency.date)}</TableCell>
+                                            </TableRow>
+                                        ))
+                                    }
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
                     </Box>
+                </Box>
                 }
                 <Box className={classes.chartBox}>
-                    <PieChartCustom title={"Сделки(сумма)"} isLoaded={dealsIsLoaded} data={dataDealsSum} char={"₽"}/>
-                    <PieChartCustom title={"Сделки(количество)"} isLoaded={dealsIsLoaded} data={dataDealsCount}
-                                    char={"шт."}/>
-                    <PieChartCustom title={"Доход"} isLoaded={eventsIsLoaded} data={dataEventIncome}/>
-                    <PieChartCustom title={"Расход"} isLoaded={eventsIsLoaded} data={dataEventConsumption}/>
+                    <PieChartCustom
+                        title={"Сделки(сумма)"}
+                        isLoaded={dealsIsLoaded}
+                        data={dataDealsSum}
+                        char={"₽"}
+                    />
+                    <PieChartCustom
+                        title={"Сделки(количество)"}
+                        isLoaded={dealsIsLoaded}
+                        data={dataDealsCount}
+                        char={"шт."}
+                    />
+                    <PieChartCustom
+                        title={"Доход"}
+                        isLoaded={eventsIsLoaded}
+                        data={dataEventIncome}
+                    />
+                    <PieChartCustom
+                        title={"Расход"}
+                        isLoaded={eventsIsLoaded}
+                        data={dataEventConsumption}
+                    />
                 </Box>
             </Container>
         </Box>

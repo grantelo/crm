@@ -9,7 +9,7 @@ import DetailPage from "./page/DetailPage";
 
 const useRoutes = (props) => (
     <Switch>
-        <Route path="/dashboard"><Dashboard/></Route>
+        <Route path={["/", "/dashboard"]} exact><Dashboard/></Route>
         <Route path="/contacts"><Contacts {...props}/></Route>
         <Route path="/deal"><Deal {...props}></Deal></Route>
         <Route path="/finance"><Finance {...props}></Finance></Route>
